@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import swal from 'sweetalert2'
 import {postLogin} from '../public/redux/action/user'
 import '../App.css';
+const localdata = JSON.parse(localStorage.getItem('Data')) || ''
 
 class Login extends Component {
   constructor() {
@@ -24,6 +25,13 @@ class Login extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
   }
 
+  componentWillMount(){
+    localdata.token !== undefined
+    ? (window.location.href = '/home')
+    :
+    console.log("hello world")
+  }
+
   isLogin(data){
     const {email, password} = this.state
     if( email==='' || password=== ''){
@@ -32,7 +40,7 @@ class Login extends Component {
         type: 'warning',
       })
     }else{
-      this.props.dispatch(postLogin(data))
+     this.props.dispatch(postLogin(data))
       .then(() => {
         swal.fire({
           title: 'Berhasil Login',
@@ -93,7 +101,7 @@ class Login extends Component {
               </Col>
             </FormGroup>
             <Row style={{ justifyContent:'center', alignItems:'center'}}>
-            <Link to={"/home"} className="btn btn-primary" onClick={() => this.isLogin(data)} style={{ width: '100%' }} >Login</Link>
+            <Link to={"/Home"} className="btn btn-primary" onClick={() => this.isLogin(data)} style={{ width: '100%' }} >Login</Link>
             </Row>
           </Form>
       </div>

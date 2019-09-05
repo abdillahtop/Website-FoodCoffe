@@ -7,6 +7,7 @@ import store from '../public/redux/store'
 
 import Home from '../screens/home'
 import Login from '../screens/login'
+import History from '../screens/history'
 
 
 export default class link extends Component {
@@ -15,7 +16,8 @@ export default class link extends Component {
             <Provider store={store}>
                 <Router>
                     <Route exact path='/' component={Login} />
-                    <Route exact path='/Home' component={Home} />
+                    <Route path='/home' component={Home} />
+                    <Route path='/history' component={History} />
                 </Router>
             </Provider>
 

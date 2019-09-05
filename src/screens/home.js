@@ -15,14 +15,16 @@ import {
 } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import swal from 'sweetalert2'
+import {Link} from 'react-router-dom'
 import api from '../config/api'
+import Recipt from '../modal/recipt'
 const axios = require('axios');
+const localdata = JSON.parse(localStorage.getItem('Data')) || ''
 
 class Home extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       collapsed: true,
       modal: false,
@@ -38,6 +40,7 @@ class Home extends Component {
       category: [],
       tampung: [],
       tampungtotal: [],
+      idTransaction: 0,
       quanty: 1
     };
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -53,9 +56,8 @@ class Home extends Component {
 
   componentDidMount() {
     this.getMenu()
-    // this._total()
+   this.getIdRecipt()
     this.getCategory()
-    console.log("hello world")
   }
 
   minus() {
@@ -86,6 +88,21 @@ class Home extends Component {
       })
   }
 
+  getIdRecipt() {
+    // console.log("id_user",localdata.id_user)
+    axios.get(`${api}history/`)
+      .then(result => {
+        // console.log("resuslt", result.data.result[0].id_history)
+        this.setState({
+          idTransaction: result.data.result[0].id_history
+         
+        })
+      })
+      .catch(error => {
+        console.log("error", error)
+      })
+  }
+
   selectItem(item) {
     //  console.log("adakah",item)
     this.state.selected.push(item)
@@ -99,7 +116,7 @@ class Home extends Component {
   getCategory() {
     axios.get(`${api}category`)
       .then(result => {
-        console.log("resuslt", result.data.result)
+        // console.log("resuslt", result.data.result)
         this.setState({
           category: result.data.result
         })
@@ -117,7 +134,7 @@ class Home extends Component {
     // console.log("price picker", price)
     if (menu === '' || image === '' || idCat === 0 || price === 0) {
       swal.fire({
-        title: 'Add Book Failed',
+        title: 'Add MenuFailed',
         type: 'warning',
         text: 'Failed add data, please fill the blank form correctly!'
       })
@@ -132,32 +149,35 @@ class Home extends Component {
         .then(() => {
           this.toggle()
           swal.fire({
-            title: 'Add Book',
+            title: 'Add Menu Success',
             type: 'success',
             text: 'Data added successfully!',
+          },function(){
+            window.location='/home'
           })
-          this.setState({
-
-          })
+          
         })
         .catch(() => {
           swal.fire({
-            title: 'Add Book Failed',
+            title: 'Add Menu Failed',
             type: 'warning',
             text: 'Title does exist!',
+          },function(){
+            window.location='/home'
           })
         })
+        
     }
 
   }
 
   _total() {
-    let total = this.state.tampungtotal.length >0&&this.state.tampungtotal.reduce((item2,item3)=> {
-     return (parseInt(item2)+parseInt(item3))
-    
-   })
-   this.state.total= total
-  //  console.log("total", total)
+    let total = this.state.tampungtotal.length > 0 && this.state.tampungtotal.reduce((item2, item3) => {
+      return (parseInt(item2) + parseInt(item3))
+
+    })
+    this.state.total = total
+    //  console.log("total", total)
   }
 
   handleInputChange(e) {
@@ -185,7 +205,7 @@ class Home extends Component {
     })
   }
 
-  
+
   render() {
 
     const { menu, price, idCat, selectAll } = this.state
@@ -208,13 +228,13 @@ class Home extends Component {
             </Navbar>
             <Row >
               <Col xs="1" style={{ backgroundColor: '#fff', height: 'auto', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)' }}>
-                <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/fork.png')} />
-                <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/clipboard.png')} />
+                <Link to={'/home'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }}  src={require('../assets/fork.png')} /> </Link>
+               <Link to={'/history'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/clipboard.png')} /></Link>
                 <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} onClick={this.toggle} src={require('../assets/add.png')} />
 
               </Col>
               <Col xs='11'>
-                <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent:'center', alignItems:'center' }}>
+                <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
                   {
                     this.state.data.map(item => {
                       return (
@@ -224,7 +244,7 @@ class Home extends Component {
                             <img style={{ width: 230, height: 180, marginRight: 10, marginLeft: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} src={item.image} alt="..." />
                             <div style={{ marginLeft: 20 }}>
                               <p style={{ fontSize: 20 }}>{item.name_menu}</p  >
-                              <h5 style={{ fontWeight: 600, fontSize: 20, marginTop:-20, marginBottom: 20 }}>{item.price}</h5>
+                              <h5 style={{ fontWeight: 600, fontSize: 20, marginTop: -20, marginBottom: 20 }}>{item.price}</h5>
                             </div>
                           </div>
                         </div>
@@ -244,9 +264,9 @@ class Home extends Component {
               this.state.selectAll[0]
                 ?
                 <>
-                  <Row style={{ justifyContent: 'center', height: 390, overflowX: 'hidden' }}>
+                  <Row style={{ justifyContent: 'center', height: 420, overflowX: 'hidden' }}>
                     {
-                      
+
                       this.state.selectAll.map((item1, index1) => {
 
                         return (
@@ -289,20 +309,22 @@ class Home extends Component {
                     </Col>
 
                     <p style={{ width: '100%', paddingLeft: 20, paddingTop: 20, marginTop: 5, marginBottom: 0 }}>*Belum Termasuk PPN</p>
-                    <Button style={{ color: '#fff', background: "#57CAD5", borderWidth: '0' }} size="lg" block>Checkout</Button>
+                    <div style={{ width: '100%', marginBottom: 10, marginTop: 10 }}>
+                      <Recipt size="lg" block data={this.state.selectAll} total={this.state.total} idTransaction={this.state.idTransaction+1} dataCashier={localdata}/>
+                    </div>
                     <Button style={{ color: '#fff', background: "#F24F8A", borderWidth: '0' }} onClick={() => this.cancel()} size="lg" block>Cancel</Button>
                   </Row>
                 </>
                 :
                 <Row style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <div style={{width: '100%', textAlign:'center' }}>
-                  <img style={{ marginLeft: 15, marginTop: 20, width: 250 }} src={require('../assets/food.png')} />
+                  <div style={{ width: '100%', textAlign: 'center' }}>
+                    <img style={{ marginLeft: 15, marginTop: 20, width: 250 }} src={require('../assets/food.png')} />
                   </div>
-                  <div style={{width:'100&', textAlign: 'center', marginTop:-30}}>
-                  <h3 style={{width: 900}}>Your Cart is Empty</h3 >
-                  </div>  
-                  <div style={{width:'100&', textAlign: 'center'}}>
-                  <p style={{ fontSize: 20, color: '#CECECE' }}>Please add some item from the menu</p>
+                  <div style={{ width: '100&', textAlign: 'center', marginTop: -30 }}>
+                    <h3 style={{ width: 900 }}>Your Cart is Empty</h3 >
+                  </div>
+                  <div style={{ width: '100&', textAlign: 'center' }}>
+                    <p style={{ fontSize: 20, color: '#CECECE' }}>Please add some item from the menu</p>
                   </div>
                 </Row>
             }
@@ -365,10 +387,14 @@ class Home extends Component {
               </FormGroup>
             </Form>
           </ModalBody>
-          <div style={{ flexDirection: 'row', padding: 20, float: 'inline-end' }}>
-            <Button style={{ background: "#F24F8A", borderWidth: '0' }} onClick={this.toggle}>Cancel</Button>{' '}
-            <Button style={{ background: "#57CAD5", borderWidth: '0' }} onClick={() => this.newMenu()}>Add</Button>
-          </div>
+          <Row style={{ flexDirection: 'row', padding: 20 }}>
+            <Col md={{ size: 3, offset: 6 }} >
+              <Button style={{ background: "#F24F8A", borderWidth: '0' }}  block onClick={this.toggle}>Cancel</Button>{' '}
+            </Col>
+            <Col>
+              <Button style={{ background: "#57CAD5", borderWidth: '0' }} block onClick={() => this.newMenu()}>Add</Button>
+            </Col>
+          </Row>
         </Modal>
       </div>
     );

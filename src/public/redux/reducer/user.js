@@ -41,7 +41,7 @@ const user = (state = initialState, action) => {
                 isRejected: true,
             }
         case 'POST_LOGIN_FULFILLED':
-            localStorage.setItem('idUser', action.payload.data.result.id_user)
+            localStorage.setItem('Data', JSON.stringify(action.payload.data.result))
             localStorage.setItem('token', action.payload.data.result.token)
             return {
                 ...state,
