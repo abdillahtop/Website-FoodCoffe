@@ -15,9 +15,10 @@ import {
 } from 'reactstrap';
 import 'font-awesome/css/font-awesome.min.css';
 import swal from 'sweetalert2'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import api from '../config/api'
 import Recipt from '../modal/recipt'
+import { async } from 'q';
 const axios = require('axios');
 const localdata = JSON.parse(localStorage.getItem('Data')) || ''
 
@@ -30,6 +31,7 @@ class Home extends Component {
       modal: false,
       loading: false,
       image: null,
+      logout:false,
       menu: '',
       idCat: 1,
       price: 0,
@@ -100,6 +102,30 @@ class Home extends Component {
       })
       .catch(error => {
         console.log("error", error)
+      })
+  }
+
+  isLogout= async() => {
+    // console.log("id_user",localdata.id_user)
+    const idUser = localdata.id_user
+    axios.post(`${api}user/logout/${idUser}`)
+      .then( async (result) => {
+        // console.log("resuslt", result.data.result[0].id_history)
+        this.setState({
+         logout: true
+        })
+        swal.fire({
+          title: 'Berhasil Logout',
+          type: 'success',
+        })
+        await localStorage.clear()
+      })
+      .catch(error => {
+        console.log("error", error)
+        swal.fire({
+          title: 'Gagal Logout',
+          type: 'error',
+        })
       })
   }
 
@@ -208,7 +234,7 @@ class Home extends Component {
 
   render() {
 
-    const { menu, price, idCat, selectAll } = this.state
+    const { menu, price, idCat, selectAll,logout } = this.state
     // console.log("idCat picker", idCat)
     // console.log("menu picker", menu)
     // console.log("image picker", image)
@@ -216,7 +242,9 @@ class Home extends Component {
     console.log("select", selectAll)
     console.log("tampung", this.state.tampungtotal)
     this._total()
-
+    if (logout) {
+      return <Redirect to='/'/>;
+    }
     return (
       <div style={{ overflowX: 'hidden' }}>
         <Row>
@@ -231,7 +259,7 @@ class Home extends Component {
                 <Link to={'/home'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }}  src={require('../assets/fork.png')} /> </Link>
                <Link to={'/history'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/clipboard.png')} /></Link>
                 <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} onClick={this.toggle} src={require('../assets/add.png')} />
-
+                <i onClick={() => this.isLogout()} class="fa fa-sign-out fa-2x"></i>
               </Col>
               <Col xs='11'>
                 <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
