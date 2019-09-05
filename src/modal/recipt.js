@@ -46,6 +46,22 @@ class ModalExample extends React.Component {
         }));
     }
 
+    formatRupiah(angka, prefix){
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split   		= number_string.split(','),
+        sisa     		= split[0].length % 3,
+        rupiah     		= split[0].substr(0, sisa),
+        ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+    
+        if(ribuan){
+          let separator = sisa ? '.' : '';
+          rupiah += separator + ribuan.join('.');
+        }
+    
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+      }
+
     render() {
         console.log("props ini", this.props.data)
         console.log("idtransaction", this.props.idTransaction)
@@ -79,7 +95,7 @@ class ModalExample extends React.Component {
                                                 <h6>{item.name_menu}</h6>
                                             </Col>
                                             <Col md={{ size: 4, offset: 3 }}>
-                                                <h6>Rp. {item.price}</h6>
+                                                <h6>Rp. {this.formatRupiah(item.price)}</h6>
                                             </Col>
                                         </Row>
                                     </>

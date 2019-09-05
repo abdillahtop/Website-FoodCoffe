@@ -81,8 +81,8 @@ class Login extends Component {
     return (
       <div className="App-header">
         <div style={{ width: '50%' }}>
-          <div style={{ textAlign: 'center', fontSize: 30 }}>
-            <text style={{ color: '#000' }}>Login Cashier </text>
+          <div style={{ textAlign: 'center', fontSize: 40 }}>
+            <text style={{ color: '#000',fontWeight: 900 }}>Login Cashier </text>
           </div>
           <Form>
             <FormGroup >

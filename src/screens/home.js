@@ -152,6 +152,22 @@ class Home extends Component {
       })
   }
 
+  formatRupiah(angka, prefix){
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+    split   		= number_string.split(','),
+    sisa     		= split[0].length % 3,
+    rupiah     		= split[0].substr(0, sisa),
+    ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+    if(ribuan){
+      let separator = sisa ? '.' : '';
+      rupiah += separator + ribuan.join('.');
+    }
+
+    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+  }
+
   newMenu = async () => {
     const { image, menu, price, idCat } = this.state
     // console.log("idCat picker", idCat)
@@ -259,7 +275,7 @@ class Home extends Component {
                 <Link to={'/home'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }}  src={require('../assets/fork.png')} /> </Link>
                <Link to={'/history'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/clipboard.png')} /></Link>
                 <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} onClick={this.toggle} src={require('../assets/add.png')} />
-                <i onClick={() => this.isLogout()} class="fa fa-sign-out fa-2x"></i>
+                <i style={{marginTop: 10, marginLeft: 18}} onClick={() => this.isLogout()} class="fa fa-sign-out fa-2x"></i>
               </Col>
               <Col xs='11'>
                 <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
@@ -272,7 +288,7 @@ class Home extends Component {
                             <img style={{ width: 230, height: 180, marginRight: 10, marginLeft: 10, borderTopLeftRadius: 10, borderTopRightRadius: 10 }} src={item.image} alt="..." />
                             <div style={{ marginLeft: 20 }}>
                               <p style={{ fontSize: 20 }}>{item.name_menu}</p  >
-                              <h5 style={{ fontWeight: 600, fontSize: 20, marginTop: -20, marginBottom: 20 }}>{item.price}</h5>
+                              <h5 style={{ fontWeight: 600, fontSize: 20, marginTop: -20, marginBottom: 20 }}>Rp. {this.formatRupiah(item.price)}</h5>
                             </div>
                           </div>
                         </div>
@@ -303,24 +319,24 @@ class Home extends Component {
                               <Col md='4' className="ml-3">
                                 <img style={{ marginLeft: 15, marginTop: 20, width: 100, height: 100 }} src={item1.image} />
                               </Col>
-                              <Col md="5" style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+                              <Col md="4" style={{ justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
                                 <Row>
-                                  <h3 style={{ textAlign: 'center' }}>{item1.name_menu}</h3>
+                                  <h5 style={{ textAlign: 'left' }}>{item1.name_menu}</h5>
                                 </Row>
                                 <Row style={{ marginLeft: -30 }}>
                                   <Col md='1'>
-                                    <Button onClick={() => this.minus()} size="sm">-</Button>
+                                    <Button onClick={() => this.minus()} color="success" size="sm">-</Button>
                                   </Col>
-                                  <Col md='4'>
+                                  <Col md='5'>
                                     <Input style={{ height: 30 }} name="quanty" value={this.state.quanty} />
                                   </Col>
                                   <Col md='1' style={{ marginLeft: -20 }}>
-                                    <Button onClick={() => this.plus()} size="sm">+</Button>
+                                    <Button onClick={() => this.plus()} color="success" size="sm">+</Button>
                                   </Col>
                                 </Row>
                               </Col>
                               <Col md='3' style={{ marginLeft: -40, marginTop: 80 }}>
-                                <h6>Rp. {item1.price}</h6>
+                                <h6>Rp. {this.formatRupiah(item1.price) }</h6>
                               </Col>
                             </Row>
                           </>
