@@ -187,6 +187,7 @@ class Home extends Component {
 
       await axios.post(`${api}menu`, formdata)
         .then(() => {
+          this.getMenu()
           this.setState({
             home: true
           })
