@@ -18,7 +18,6 @@ import swal from 'sweetalert2'
 import {Link, Redirect} from 'react-router-dom'
 import api from '../config/api'
 import Recipt from '../modal/recipt'
-import { async } from 'q';
 const axios = require('axios');
 const localdata = JSON.parse(localStorage.getItem('Data')) || ''
 
@@ -30,6 +29,7 @@ class Home extends Component {
       collapsed: true,
       modal: false,
       loading: false,
+      home:false,
       image: null,
       logout:false,
       menu: '',
@@ -111,9 +111,7 @@ class Home extends Component {
     axios.post(`${api}user/logout/${idUser}`)
       .then( async (result) => {
         // console.log("resuslt", result.data.result[0].id_history)
-        this.setState({
-         logout: true
-        })
+        
         swal.fire({
           title: 'Berhasil Logout',
           type: 'success',
@@ -194,8 +192,6 @@ class Home extends Component {
             title: 'Add Menu Success',
             type: 'success',
             text: 'Data added successfully!',
-          },function(){
-            window.location='/home'
           })
           
         })
@@ -204,8 +200,6 @@ class Home extends Component {
             title: 'Add Menu Failed',
             type: 'warning',
             text: 'Title does exist!',
-          },function(){
-            window.location='/home'
           })
         })
         
@@ -250,7 +244,7 @@ class Home extends Component {
 
   render() {
 
-    const { menu, price, idCat, selectAll,logout } = this.state
+    const { menu, price, idCat, selectAll,logout,home } = this.state
     // console.log("idCat picker", idCat)
     // console.log("menu picker", menu)
     // console.log("image picker", image)
@@ -258,9 +252,12 @@ class Home extends Component {
     console.log("select", selectAll)
     console.log("tampung", this.state.tampungtotal)
     this._total()
-    if (logout) {
-      return <Redirect to='/'/>;
-    }
+    // if (logout) {
+    //   return <Redirect to='/'/>;
+    // } else
+    // if (home) {
+    //   return <Redirect to='/home'/>;
+    // }
     return (
       <div style={{ overflowX: 'hidden' }}>
         <Row>
@@ -274,8 +271,8 @@ class Home extends Component {
               <Col xs="1" style={{ backgroundColor: '#fff', height: 'auto', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)' }}>
                 <Link to={'/home'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }}  src={require('../assets/fork.png')} /> </Link>
                <Link to={'/history'}> <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} src={require('../assets/clipboard.png')} /></Link>
-                <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} onClick={this.toggle} src={require('../assets/add.png')} />
-                <i style={{marginTop: 10, marginLeft: 18}} onClick={() => this.isLogout()} class="fa fa-sign-out fa-2x"></i>
+               <img style={{ marginLeft: 15, marginTop: 20, marginBottom: 20, width: 30 }} onClick={this.toggle} src={require('../assets/add.png')} />
+              <Link to={'/'}>  <i style={{marginTop: 10, marginLeft: 18}} onClick={() => this.isLogout()} class="fa fa-sign-out fa-2x"></i></Link> 
               </Col>
               <Col xs='11'>
                 <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent: 'center', alignItems: 'center' }}>

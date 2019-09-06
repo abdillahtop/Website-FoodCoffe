@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalBody, Row, Col } from 'reactstrap';
 import axios from 'axios'
+import {Redirect, Link} from 'react-router-dom'
 import swal from 'sweetalert2'
 
 class ModalExample extends React.Component {
@@ -8,6 +9,7 @@ class ModalExample extends React.Component {
         super(props);
         this.state = {
             modal: false,
+            redirect: false,
             data: this.props.data,
             dataCashier: this.props.dataCashier,
             idTransaction: this.props.idTransaction,
@@ -24,9 +26,7 @@ class ModalExample extends React.Component {
                 title: 'Transaksi Berhasil',
                 type: 'success',
                 text: 'Silahkan Cek Bukti Transaksi',
-              },
-                window.location.href='/home'
-              )
+              })
               this.toggle()
         })
         .catch(()=>{
@@ -34,9 +34,7 @@ class ModalExample extends React.Component {
                 title: 'Transaksi Gagal',
                 type: 'error',
                 text: 'Ada Gangguan dalam Sistem Kami!, Hubungi Penyedia layanan anda',
-              },
-                window.location.href='/home'
-              )
+              })
         })
     }
 
@@ -65,14 +63,17 @@ class ModalExample extends React.Component {
     render() {
         console.log("props ini", this.props.data)
         console.log("idtransaction", this.props.idTransaction)
-        const { idTransaction,  data, dataCashier} = this.state
+        const { idTransaction,  data, dataCashier, redirect} = this.state
         let dataHistory = {
             idCashier : dataCashier.id_user,
             total: this.props.total+this.props.total/100*10
         }
+        // if (redirect) {
+        //     return <Redirect to='/home'/>;
+        //   }
         return (
             <div>
-                <Button style={{ color: '#fff', background: "#57CAD5", borderWidth: '0', width: '100%' }} size="lg" block onClick={this.toggle}>Checkout</Button>
+                <Link to={'/home'}><Button style={{ color: '#fff', background: "#57CAD5", borderWidth: '0', width: '100%' }} size="lg" block onClick={this.toggle}>Checkout</Button></Link>
                 {/* <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button> */}
                 <Modal isOpen={this.state.modal} fade={false} toggle={this.toggle} className={this.props.className}>
                     <Row style={{ padding: 20 }}>
@@ -122,7 +123,8 @@ class ModalExample extends React.Component {
                         </Row>
                     </ModalBody>
                     <Row style={{paddingLeft: 40, paddingRight:40, justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
-                        <Button style={{ background: "#F24F8A", borderWidth: '0' }} onClick={()=>this.newHistory(dataHistory)}  block>Print</Button>{' '}
+                        <div style={{width: '100%'}}>
+                       <Link to={'/home'}> <Button style={{ background: "#F24F8A", borderWidth: '0' }} onClick={()=>this.newHistory(dataHistory)}  block>Print</Button></Link></div>
                         <h6 >Or</h6>
                         <Button style={{ background: "#57CAD5", borderWidth: '0' }} onClick={this.toggle} block>Send Email</Button>
                     </Row>

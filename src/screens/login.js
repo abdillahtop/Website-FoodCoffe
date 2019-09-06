@@ -9,7 +9,7 @@ import {
   Col
 } from 'reactstrap'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import {Redirect,Link } from 'react-router-dom'
 import swal from 'sweetalert2'
 import {postLogin} from '../public/redux/action/user'
 import '../App.css';
@@ -28,7 +28,7 @@ class Login extends Component {
 
   componentWillMount(){
     localdata.token !== undefined
-    ? (window.location.href = '/home')
+    ? this.setState({redirect:true})
     :
     console.log("hello world")
   }
@@ -43,9 +43,6 @@ class Login extends Component {
     }else{
      this.props.dispatch(postLogin(data))
       .then(() => {
-        this.setState({
-          redirect: true
-        })
         swal.fire({
           title: 'Berhasil Login',
           type: 'success',
@@ -74,9 +71,6 @@ class Login extends Component {
     let data={
       email: email,
       password: password
-    }
-    if (redirect) {
-      return <Redirect to='/home'/>;
     }
     return (
       <div className="App-header">
@@ -108,7 +102,8 @@ class Login extends Component {
               </Col>
             </FormGroup>
             <Row style={{ justifyContent:'center', alignItems:'center'}}>
-            <Button style={{ background: "#F24F8A", borderWidth: '0', width:'92%' }} size='lg' block onClick={()=>this.isLogin(data)}>Login</Button>{' '}
+              <div style={{width:'92%', }}>
+           <Link to={'/home'}> <Button style={{ background: "#F24F8A", borderWidth: '0', width:'100%' }} size='lg' block onClick={()=>this.isLogin(data)}>Login</Button>{' '}</Link></div>
             </Row>
           </Form>
       </div>
