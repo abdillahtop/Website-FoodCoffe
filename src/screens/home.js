@@ -187,6 +187,9 @@ class Home extends Component {
 
       await axios.post(`${api}menu`, formdata)
         .then(() => {
+          this.setState({
+            home: true
+          })
           this.toggle()
           swal.fire({
             title: 'Add Menu Success',
@@ -255,9 +258,9 @@ class Home extends Component {
     // if (logout) {
     //   return <Redirect to='/'/>;
     // } else
-    // if (home) {
-    //   return <Redirect to='/home'/>;
-    // }
+    if (home) {
+      return <Redirect to='/home'/>;
+    }
     return (
       <div style={{ overflowX: 'hidden' }}>
         <Row>
@@ -433,7 +436,7 @@ class Home extends Component {
               <Button style={{ background: "#F24F8A", borderWidth: '0' }}  block onClick={this.toggle}>Cancel</Button>{' '}
             </Col>
             <Col>
-              <Link to={'/home'}> <Button style={{ background: "#57CAD5", borderWidth: '0' }} block onClick={() => this.newMenu()}>Add</Button></Link>
+              <Button style={{ background: "#57CAD5", borderWidth: '0' }} block onClick={() => this.newMenu()}>Add</Button>
             </Col>
           </Row>
         </Modal>
