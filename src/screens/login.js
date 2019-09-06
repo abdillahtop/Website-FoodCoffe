@@ -21,16 +21,8 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      redirect: false
     }
     this.handleInputChange = this.handleInputChange.bind(this)
-  }
-
-  componentWillMount(){
-    localdata.token !== undefined
-    ? this.setState({redirect:true})
-    :
-    console.log("hello world")
   }
 
   isLogin(data){
