@@ -10,6 +10,7 @@ import {
   Label,
   Badge,
   Input,
+  Spinner,
   Row,
   Col
 } from 'reactstrap';
@@ -18,6 +19,7 @@ import swal from 'sweetalert2'
 import {Link, Redirect} from 'react-router-dom'
 import api from '../config/api'
 import Recipt from '../modal/recipt'
+import '../App.css'
 const axios = require('axios');
 const localdata = JSON.parse(localStorage.getItem('Data')) || ''
 
@@ -28,8 +30,7 @@ class Home extends Component {
     this.state = {
       collapsed: true,
       modal: false,
-      loading: false,
-      home:false,
+      loading: true,
       image: null,
       logout:false,
       menu: '',
@@ -187,7 +188,6 @@ class Home extends Component {
 
       await axios.post(`${api}menu`, formdata)
         .then(() => {
-          this.getMenu()
           this.setState({
             home: true
           })
@@ -248,7 +248,7 @@ class Home extends Component {
 
   render() {
 
-    const { menu, price, idCat, selectAll,logout,home } = this.state
+    const { menu, price, idCat, selectAll,loading,home } = this.state
     // console.log("idCat picker", idCat)
     // console.log("menu picker", menu)
     // console.log("image picker", image)
@@ -264,6 +264,7 @@ class Home extends Component {
     }
     return (
       <div style={{ overflowX: 'hidden' }}>
+      
         <Row>
           <Col xs="8" >
             <Navbar light color="#fff" style={{ boxShadow: '-5px 2px 5px rgba(0, 0, 0, 0.25)', height: 60 }} expand="lg">
@@ -281,6 +282,12 @@ class Home extends Component {
               <Col xs='11'>
                 <Row style={{ padding: 30, width: "102%", height: 590, overflowX: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
                   {
+                     loading
+                     ?
+                     <div className="App-loading">
+                     <Spinner color="primary"  />
+                     </div>
+                     :
                     this.state.data.map(item => {
                       return (
 
@@ -375,6 +382,8 @@ class Home extends Component {
             }
           </Col>
         </Row>
+      
+      
         <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle} className={this.props.className} backdrop={this.state.backdrop}>
           <div style={{ padding: 20 }}>
             <h3>ADD MENU</h3>

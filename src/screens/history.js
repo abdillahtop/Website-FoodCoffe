@@ -4,6 +4,7 @@ import {
   NavbarBrand,
   Table,
   Row,
+  Spinner,
   Col,
   ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
@@ -20,7 +21,8 @@ class History extends Component {
     this.state = {
       data: [],
       dropdownOpen: false,
-      select: 1
+      select: 1,
+      loading:true
     };
     this.toggle = this.toggle.bind(this);
   }
@@ -43,7 +45,8 @@ class History extends Component {
         console.log("resuslt", result.data.result)
         this.setState({
           data: result.data.result,
-          select: 1
+          select: 1,
+          loading:false
 
         })
       })
@@ -60,7 +63,8 @@ class History extends Component {
         console.log("resuslt", result.data.result)
         this.setState({
           data: result.data.result,
-          select: 2
+          select: 2,
+          loading:false
 
         })
       })
@@ -77,7 +81,8 @@ class History extends Component {
         console.log("resuslt", result.data.result)
         this.setState({
           data: result.data.result,
-          select: 3
+          select: 3,
+          loading:false
         })
       })
       .catch(error => {
@@ -93,8 +98,8 @@ class History extends Component {
         console.log("resuslt", result.data.result)
         this.setState({
           data: result.data.result,
-          select: 4
-
+          select: 4,
+          loading:false
         })
       })
       .catch(error => {
@@ -110,8 +115,8 @@ class History extends Component {
         console.log("resuslt", result.data.result)
         this.setState({
           data: result.data.result,
-          select: 5
-
+          select: 5,
+          loading:false
         })
       })
       .catch(error => {
@@ -169,6 +174,12 @@ class History extends Component {
                   </thead>
                   <tbody>
                     {
+                        this.state.loading
+                        ?
+                        <div className="App-loading">
+                        <Spinner color="primary"  />
+                        </div>
+                        :
                       this.state.data.map((item, key) => {
                         return (
                           <tr>

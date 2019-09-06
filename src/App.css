@@ -19,6 +19,13 @@
   color: white;
 }
 
+.App-loading {
+  display: flex;
+  padding-top: 100;
+  align-items: center;
+  justify-content: center;
+}
+
 .App-link {
   color: #61dafb;
 }
