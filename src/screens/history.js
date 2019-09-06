@@ -38,7 +38,7 @@ class History extends Component {
   }
 
   getHistory() {
-    // console.log("id_user",localdata.id_user)
+    console.log("id_user",localdata.id_user)
     const idUser = localdata.id_user
     axios.get(`${api}history/${idUser}`)
       .then(result => {
