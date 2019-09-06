@@ -433,7 +433,7 @@ class Home extends Component {
               <Button style={{ background: "#F24F8A", borderWidth: '0' }}  block onClick={this.toggle}>Cancel</Button>{' '}
             </Col>
             <Col>
-              <Button style={{ background: "#57CAD5", borderWidth: '0' }} block onClick={() => this.newMenu()}>Add</Button>
+              <Link to={'/home'}> <Button style={{ background: "#57CAD5", borderWidth: '0' }} block onClick={() => this.newMenu()}>Add</Button></Link>
             </Col>
           </Row>
         </Modal>
